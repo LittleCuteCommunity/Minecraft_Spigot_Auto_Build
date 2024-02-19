@@ -1,0 +1,43 @@
+#!/bin/bash
+
+echo Download and Compress BungeeCord
+wget -O /BungeeCord/BungeeCord.jar https://ci.md-5.net/job/BungeeCord/lastSuccessfulBuild/artifact/bootstrap/target/BungeeCord.jar
+wget -O /BungeeCord/module/cmd_alert.jar https://ci.md-5.net/job/BungeeCord/lastSuccessfulBuild/artifact/module/cmd-alert/target/cmd_alert.jar
+wget -O /BungeeCord/module/cmd_find.jar https://ci.md-5.net/job/BungeeCord/lastSuccessfulBuild/artifact/module/cmd-find/target/cmd_find.jar
+wget -O /BungeeCord/module/cmd_kick.jar https://ci.md-5.net/job/BungeeCord/lastSuccessfulBuild/artifact/module/cmd-kick/target/cmd_kick.jar
+wget -O /BungeeCord/module/cmd_list.jar https://ci.md-5.net/job/BungeeCord/lastSuccessfulBuild/artifact/module/cmd-list/target/cmd_list.jar
+wget -O /BungeeCord/module/cmd_send.jar https://ci.md-5.net/job/BungeeCord/lastSuccessfulBuild/artifact/module/cmd-send/target/cmd_send.jar
+wget -O /BungeeCord/module/cmd_server.jar https://ci.md-5.net/job/BungeeCord/lastSuccessfulBuild/artifact/module/cmd-server/target/cmd_server.jar
+wget -O /BungeeCord/module/reconnect_yaml.jar https://ci.md-5.net/job/BungeeCord/lastSuccessfulBuild/artifact/module/reconnect-yaml/target/reconnect_yaml.jar
+zip -q -r ./dist/BungeeCord.zip BungeeCord
+
+echo Build Spigot
+set -euo pipefail
+buildNumber=`curl https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/buildNumber`
+my_number=`curl https://api.github.com/repos/LittleCuteCommunity/Minecraft_Spigot_Auto_Build/releases/latest | jq -r '.tag_name'`
+
+echo latest spigot build tools release Number: $buildNumber
+echo latest my_build number: $my_number
+
+# Some times because of network error, it may not be digital, then we exit.
+if [ -n "`echo ${my_number} | sed -n '/^[0-9][0-9]*$/p'`" -a -n "`echo ${buildNumber} | sed -n '/^[0-9][0-9]*$/p'`" ];then
+
+    if [ $my_number -eq $buildNumber ];then
+        exit 0
+    fi
+else
+    exit 0
+fi
+
+curl -O https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
+java -jar -Xmx1024M BuildTools.jar
+echo -n $buildNumber > new_moe_build.txt
+mv spigot-*.jar ./dist/spigot-*.jar
+
+echo Upload
+if [ -f 'new_moe_build.txt' ];then
+    TAGNAME=$(cat new_moe_build.txt)
+    NAME="$(for a in "./dist/*"; do echo $a; done)"
+    # hub release create $(for a in "./dist/*"; do echo -a $a; done) -m "$NAME" -t "master" "$TAGNAME"
+    gh release create "$TAGNAME" --target "master" --title "$NAME" "./dist/*"
+fi
