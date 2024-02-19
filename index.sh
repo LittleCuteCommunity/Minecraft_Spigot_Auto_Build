@@ -1,5 +1,4 @@
 #!/bin/bash
-#!/bin/bash
 
 echo Download and Compress BungeeCord
 cd BungeeCord
