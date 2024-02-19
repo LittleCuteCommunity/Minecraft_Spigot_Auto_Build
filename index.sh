@@ -44,7 +44,7 @@ if [ -f 'new_moe_build.txt' ];then
     TAGNAME=$(cat new_moe_build.txt)
     NAME="$(for a in 'spigot-*.jar'; do echo $a; done)"
     bungeecordBuild=`curl https://ci.md-5.net/job/BungeeCord/lastSuccessfulBuild/buildNumber`
-    lastNAME=$NAME"_Build_"$TAGNAME"+Bungeecord_build"$bungeecordBuild
+    lastNAME=$NAME"_Build_"$TAGNAME"+Bungeecord_build_"$bungeecordBuild
     # hub release create $(for a in 'spigot-*.jar'; do echo -a $a; done) -m "$NAME" -t "master" "$TAGNAME"
     gh release create "$TAGNAME" --target "master" --title "$lastNAME" *
 fi
