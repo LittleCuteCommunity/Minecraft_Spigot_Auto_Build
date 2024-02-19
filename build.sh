@@ -1,4 +1,5 @@
 #!/bin/bash
+
 echo Build Spigot
 set -euo pipefail
 buildNumber=`curl https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/buildNumber`
@@ -21,11 +22,3 @@ curl -O https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/arti
 java -jar -Xmx1024M BuildTools.jar
 echo -n $buildNumber > new_moe_build.txt
 mv spigot-*.jar ./dist/spigot-*.jar
-
-echo Upload
-if [ -f 'new_moe_build.txt' ];then
-    TAGNAME=$(cat new_moe_build.txt)
-    NAME="$(for a in './dist/spigot-*.jar'; do echo $a; done)"
-    # hub release create $(for a in './dist/spigot-*.jar'; do echo -a $a; done) -m "$NAME" -t "master" "$TAGNAME"
-    gh release create "$TAGNAME" --target "master" --title "$NAME" dist
-fi
