@@ -18,7 +18,7 @@ else
     exit 0
 fi
 
+cd dist
 curl -O https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
 java -jar -Xmx1024M BuildTools.jar
 echo -n $buildNumber > new_moe_build.txt
-mv spigot-*.jar ./dist/spigot-*.jar
