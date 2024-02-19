@@ -2,7 +2,7 @@
 
 set -euo pipefail
 buildNumber=`curl https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/buildNumber`
-my_number=`curl https://api.github.com/repos/horizon86/spigotAutoBuild/releases/latest | jq -r '.tag_name'`
+my_number=`curl https://api.github.com/repos/LittleCuteCommunity/Minecraft_Spigot_Auto_Build/releases/latest | jq -r '.tag_name'`
 
 echo latest spigot build tools release Number: $buildNumber
 echo latest my_build number: $my_number
