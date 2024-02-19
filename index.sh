@@ -41,5 +41,5 @@ echo Upload
 cd dist
 bungeecordBuild=`curl https://ci.md-5.net/job/BungeeCord/lastSuccessfulBuild/buildNumber`
 NAME="$(for a in 'spigot-*.jar'; do echo $a; done)"_Build_"$buildNumber"+Bungeecord_build_"$bungeecordBuild"
-# hub release create $(for a in 'spigot-*.jar'; do echo -a $a; done) -m "$NAME" -t "master" "$TAGNAME"
+# hub release create $(for a in 'spigot-*.jar'; do echo -a $a; done) -m "$NAME" -t "master" "$buildNumber"
 gh release create "$buildNumber" --target "master" --title "$NAME" * -notes "Auto Build"
