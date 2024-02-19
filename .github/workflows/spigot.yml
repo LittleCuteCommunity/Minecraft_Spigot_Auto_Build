@@ -19,12 +19,8 @@ jobs:
         with:
           distribution: 'adopt' # See 'Supported distributions' for available options
           java-version: '21'
-      - name: Download BungeeCord
-        run: bash bungeecord.sh
-      - name: Build if necessary
-        run: bash build.sh
-      - name: Upload if necessary
-        run: bash upload.sh
+      - name: Build and Upload
+        run: bash index.sh
         env:
           GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
       - name: Keepalive Workflow
