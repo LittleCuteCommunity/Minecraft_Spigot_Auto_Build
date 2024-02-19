@@ -18,6 +18,7 @@ cd ..
 echo Build Spigot
 set -euo pipefail
 buildNumber=`curl https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/buildNumber`
+bungeecordBuild=`curl https://ci.md-5.net/job/BungeeCord/lastSuccessfulBuild/buildNumber`
 my_number=`curl https://api.github.com/repos/LittleCuteCommunity/Minecraft_Spigot_Auto_Build/releases/latest | jq -r '.tag_name'`
 
 echo latest spigot build tools release Number: $buildNumber
@@ -44,5 +45,5 @@ if [ -f 'new_moe_build.txt' ];then
     TAGNAME=$(cat new_moe_build.txt)
     NAME="$(for a in 'spigot-*.jar'; do echo $a; done)"
     # hub release create $(for a in 'spigot-*.jar'; do echo -a $a; done) -m "$NAME" -t "master" "$TAGNAME"
-    gh release create "$TAGNAME" --target "master" --title "$NAME" *
+    gh release create "$TAGNAME" --target "master" --title "$NAME Build $TAGNAME + Bungeecord Build $bungeecordBuild" *
 fi
